@@ -1,0 +1,136 @@
+@font-face {
+    font-family: NotoSans;
+    src: url(NotoSansCJKtc-hinted);
+  }
+
+body {
+    height: 100vh;
+    margin: 0;
+    padding: 3em;
+    /* font-family: 'NotoSans'; */
+    /* background: url(./img/—Pngtree—simple\ dream\ starry\ sky\ galaxy_973685.jpg); */
+    /* background-attachment: fixed; */
+}
+
+* {
+    box-sizing: border-box;
+    /* border: 1px solid black; */
+}
+
+.logo {
+    width: 5.5em;
+    height: .92em; 
+    margin: 0;
+    font-size: 5.5em;
+    border-bottom: 1px solid blue;
+}
+
+.title_box {
+    height: 3.78em; 
+    display: flex;
+    align-items: center;
+}
+
+.title {
+    height: 1.1em;
+    /* display: inline-block; */
+    font-size: 2.5em;
+    letter-spacing: .3em;
+    border-bottom: 1px solid blue;
+}
+
+.line {
+    width: 25em;
+    border: 1px solid rgb(219, 219, 219);
+    /* display: inline-block; */
+}
+
+/* intro */
+.intro_body {
+    height: calc(100vh - 20em);
+    display: flex;
+    align-items: center;
+    margin-top: 5em;
+}
+
+.intro_group {
+    height: 19em;
+    padding-left: .5em; 
+    margin-right: 8em;
+    border-left: 1px solid rgb(219, 219, 219);
+}
+
+.intro_group > input {
+    display: block;
+    font-size: 1.3em;
+    letter-spacing: .3em;
+    margin: 0px;
+    margin-bottom: .5em;
+    /* background: white; */
+    border: white;
+}
+
+.button_onclick {
+    color: white;
+    background: black;
+}
+
+.intro_person {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.intro_person_standby {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+}
+
+.intro_person_group {
+    display: flex;
+    flex-wrap: wrap;
+    position: absolute;
+    top: 0;
+    opacity: 0;
+}
+
+.intro_group_show {
+    opacity: 100;
+}
+
+.intro_who{
+    position: relative;
+}
+
+.intro_basic {
+    width: 100px;
+    height: 150px;
+    margin: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.intro_basic > p {
+    margin: 5px;
+}
+
+.img_round {
+    width: 100px;
+    border-radius: 100%;
+}
+
+.intro_person_name{
+font-size: 20px;
+letter-spacing: 5px;
+}
+
+.intro_text{
+    position: absolute;
+    width: 400px;
+    overflow-y: scroll;
+    top: 0;
+    opacity: 0;
+}
