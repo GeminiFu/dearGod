@@ -24,13 +24,41 @@ window.onload = function () {
 
                 for (const [index, person] of peopleDataByGroup[group].entries()) {
                     introPerson.innerHTML += `
-                    <div class="intro_who">
-                        <div class="intro_basic" data-person-id=${index}>
+                    <div class="intro_who" data-group=${person.group} data-id=${index}>
+                        <div class="intro_basic">
                             <img class="img_round" src=${person.imgUrl} alt="">
-                            <p class="intro_person_name">${person.titleAndName}</p>
+                            <p class="intro_person_title">${person.title}</p>
+                            <p class="intro_person_name">${person.name}</p>
                         </div>
-                        <p class="intro_text">${person.describe}</p>
-                    </div>`
+                    </div>
+                    `
+                }
+
+                // personDetailClickEvent()
+            }
+
+            // TODO: 詳細介紹
+            function personDetailClickEvent() {
+                const elements = [...document.getElementsByClassName('intro_who')]
+
+                console.log(elements)
+
+                for (const element of elements) {
+                    element.addEventListener('click', () => {
+                        const group = element.dataset.group
+                        const id = element.dataset.id
+                        const person = peopleDataByGroup[group][id]
+
+                        console.log(person)
+                        element.innerHTML = `
+                        <div class="intro_basic">
+                            <img class="img_round" src=${person.imgUrl} alt="">
+                            <p class="intro_person_title">${person.title}</p>
+                            <p class="intro_person_name">${person.name}</p>
+                        </div>
+                        <p>${person.describe}</p>
+                        `
+                    })
                 }
             }
 
@@ -45,8 +73,6 @@ window.onload = function () {
                         deleteIndex.unshift(index)
                     }
                 }
-
-                console.log(deleteIndex)
 
                 for (i of deleteIndex) {
                     personList.splice(i, 1)
@@ -64,6 +90,8 @@ window.onload = function () {
                     buildPersonElementByGroup(group)
                 })
             }
+
+            navByGroupButton[0].click()
 
             function buttonClickStyle(element) {
                 const buttonClicked = document.getElementsByClassName('button_onclick')[0]

@@ -6,10 +6,41 @@ const driver = new Builder()
     .forBrowser('chrome')
     .setChromeOptions(new chrome.Options()
         // // 輸入 chrome.exe 的位址
-        // .setChromeBinaryPath()
+        .setChromeBinaryPath('Z:\\games$\\outside\\bot\\68006\\App\\Chrome-bin\\chrome.exe')
         // .headless()
     )
     .build()
+
+async function mainAndOutput() {
+    const people = []
+    let urlId = '304303517911694'
+
+    for (let i = 0; i < 43; i++) {
+        await openPage(urlId)
+        const text = await getArticle()
+        const nextId = await getNextId()
+        const imgUrl = await getImgUrl()
+
+        urlId = nextId
+
+        const person = await personDetail(text)
+
+        person['imgUrl'] = imgUrl
+
+        people.push(person)
+    }
+
+    driver.quit()
+
+    // 寫入檔案
+    fs.writeFile('people.json', JSON.stringify(people), (err) => { console.log(err) })
+}
+
+mainAndOutput()
+
+// --function tools--------------------------------------------------------------------------------------------------
+// input (完整文章, 搜尋起始點, 開始前的字串, 結束後的字串)
+// output {paragraph, end}
 
 async function openPage(urlId) {
     // 開啟網頁
@@ -80,7 +111,15 @@ async function personDetail(webElement) {
 
     for (i in paragraphs) {
         const { paragraph, end } = sliceString(webElement, startHead, paragraphs[i][0], paragraphs[i][1])
-        person[i] = paragraph
+
+        if (i === 'titleAndName') {
+            const [title, name] = spliteTitleAndName(paragraph)
+
+            person["title"] = title
+            person["name"] = name
+        } else {
+            person[i] = paragraph
+        }
 
         startHead = end
     }
@@ -88,38 +127,6 @@ async function personDetail(webElement) {
     return person
 }
 
-async function mainAndOutput() {
-    const people = []
-    let urlId = '304303517911694'
-
-    for (let i = 0; i < 43; i++) {
-        await openPage(urlId)
-
-        const text = await getArticle()
-        const nextId = await getNextId()
-        const imgUrl = await getImgUrl()
-
-        urlId = nextId
-
-        const person = await personDetail(text)
-
-        person['imgUrl'] = imgUrl
-
-        people.push(person)
-    }
-
-    console.log(people)
-
-    driver.quit()
-
-    // 寫入檔案
-    fs.writeFile('people.json', JSON.stringify(people), (err) => { console.log(err) })
-}
-
-mainAndOutput()
-
-// input (完整文章, 搜尋起始點, 開始前的字串, 結束後的字串)
-// output {paragraph, end}
 function sliceString(text, startHead, startSign, endSign) {
     const start = text.indexOf(startSign, startHead) + startSign.length
     const end = text.indexOf(endSign, start)
@@ -129,4 +136,20 @@ function sliceString(text, startHead, startSign, endSign) {
     text = text.slice(end)
 
     return { paragraph, end }
+}
+
+// input titleAndName
+// output [title, name]
+function spliteTitleAndName(titleAndName) {
+    let signIndex = 0
+    let length = titleAndName.length
+
+    while (titleAndName[length + signIndex] !== '·' && signIndex > -length) {
+        signIndex--
+    }
+
+    const title = titleAndName.slice(0, signIndex)
+    const name = titleAndName.slice(signIndex + 1)
+
+    return [title, name]
 }

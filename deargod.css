@@ -85,18 +85,21 @@ body {
     flex-wrap: wrap;
 }
 
-.intro_who {
-    position: relative;
-}
+.intro_who {}
 
 .intro_basic {
     width: 100px;
     height: 150px;
     margin: 15px;
+
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    float: left;
 }
+
+
 
 .intro_basic>p {
     margin: 5px;
@@ -107,15 +110,14 @@ body {
     border-radius: 100%;
 }
 
+.intro_person_titile {
+    font-size: 12px;
+}
+
 .intro_person_name {
     font-size: 20px;
     letter-spacing: 5px;
+    white-space: nowrap;
 }
 
-.intro_text {
-    position: absolute;
-    width: 400px;
-    overflow-y: scroll;
-    top: 0;
-    opacity: 0;
-}
+.intro_person_detail {}
