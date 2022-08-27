@@ -8,29 +8,6 @@ window.onload = function () {
         if (request.status == 200) {/*返回状态为200，即为数据获取成功*/
             const personList = JSON.parse(request.responseText)
                 , introPerson = document.querySelectorAll(".intro_person")[0]
-
-            console.log(personList)
-            console.log(introPerson)
-
-            let idNumber = 0;
-            for (let i = 0; i < personList.length; i++) {
-                for (var j = 0; j < personList[i].length; j++) {
-                    var img = personList[i][j]["img"];
-                    var title = stringToUnicode(personList[i][j]["title"]);
-                    var text = stringToUnicode(personList[i][j]["text"]);
-                    personByGroup[i].innerHTML += `
-                        <div class="intro_who">
-                            <div class="intro_basic" data-person-id=${idNumber}>
-                                <img class="img_round" src=${img} alt="">
-                                <p class="intro_person_name">${name}</p>
-                                <p>${title}</p>
-                            </div>
-                            <p class="intro_text">${text}</p>
-                        </div>`;
-                    idNumber++;
-                }
-            }
-
             // 建立一個物件依組別存取
             const peopleDataByGroup = {}
 
@@ -44,8 +21,6 @@ window.onload = function () {
                 }
 
                 introPerson.innerHTML = ''
-
-                console.log(peopleDataByGroup[group])
 
                 for (const [index, person] of peopleDataByGroup[group].entries()) {
                     introPerson.innerHTML += `
@@ -67,43 +42,34 @@ window.onload = function () {
 
                     if (value.group === group) {
                         peopleDataByGroup[group].push(value)
-                        deleteIndex.push(index)
+                        deleteIndex.unshift(index)
                     }
                 }
+
+                console.log(deleteIndex)
 
                 for (i of deleteIndex) {
                     personList.splice(i, 1)
                 }
-
-                console.log(personList)
-                console.log(peopleDataByGroup)
             }
 
-            buildPersonElementByGroup('導表組')
-
             // 按鈕點擊事件
-            $(".intro_group > input").click(function () {
-                // button事件
-                // 刪除 .button_onclick
-                $(".button_onclick")[0].classList.remove("button_onclick");
-                // 增加 button_onclick
-                this.classList.add("button_onclick")
+            const navByGroupButton = [...document.getElementsByName('navByGroupButton')]
 
-                // group 事件
-                // 刪除 .intro_group_show
-                $(".intro_group_show")[0].classList.remove("intro_group_show");
-                var id = this.dataset.group,
-                    group = document.getElementsByClassName("intro_person_group");
-                // 找到按鈕相對應的 group
-                for (var i = 0; i < group.length; i++) {
-                    if (group[i].dataset.group == id) {
-                        group[i].classList.add("intro_group_show");
-                    }
-                }
+            for (const element of navByGroupButton) {
+                element.addEventListener('click', () => {
+                    const group = element.value
 
-                // title 事件
-                $(".title")[0].innerHTML = this.value;
-            })
+                    buttonClickStyle(element)
+                    buildPersonElementByGroup(group)
+                })
+            }
+
+            function buttonClickStyle(element) {
+                const buttonClicked = document.getElementsByClassName('button_onclick')[0]
+                buttonClicked.classList.remove("button_onclick");
+                element.classList.add("button_onclick")
+            }
         }
     }
 }
